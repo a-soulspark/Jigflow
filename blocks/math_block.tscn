@@ -1,0 +1,55 @@
+[gd_scene load_steps=5 format=3 uid="uid://vgncngl1tun7"]
+
+[ext_resource type="PackedScene" uid="uid://cbgxhbs5pl4ks" path="res://blocks/block.tscn" id="1_r10fi"]
+[ext_resource type="SystemFont" uid="uid://clgxx8np5xv0c" path="res://ui/mono_font.tres" id="2_y65s0"]
+
+[sub_resource type="GDScript" id="GDScript_leqtk"]
+resource_name = "MathBlock"
+script/source = "extends Block
+
+var expression = Expression.new()
+
+func get_property_map():
+	return {
+		\"input_a\": PropertyValue.new('In A', PropertyValue.Type.NUMBER, 0, Port.Mode.INPUT, Color.MEDIUM_AQUAMARINE),
+		\"input_b\": PropertyValue.new('In B', PropertyValue.Type.NUMBER, 0, Port.Mode.INPUT, Color.MEDIUM_PURPLE),
+		\"output\": PropertyValue.new('Out', PropertyValue.Type.NUMBER, 0, Port.Mode.OUTPUT, Color.DARK_ORANGE),
+		\"operator\": PropertyValue.new('Op', PropertyValue.Type.TEXT, '+', Port.Mode.INPUT, Color.GRAY),
+	}
+
+func initialize() -> void:
+	super.initialize()
+	properties.operator.connect(\"property_changed\", _update_label)
+
+func _update_label(property : PropertyValue):
+	$Label.text = str(property.value)
+
+func _execute():
+	expression.parse(\"{0} {1} {2}\".format([properties.input_a.value, properties.operator.value, properties.input_b.value]))
+	properties.output.set_value(int(expression.execute()))
+"
+
+[sub_resource type="LabelSettings" id="LabelSettings_frmrm"]
+line_spacing = 0.0
+font = ExtResource("2_y65s0")
+font_size = 40
+outline_size = 8
+outline_color = Color(0, 0, 0, 0.25098)
+shadow_size = 4
+shadow_color = Color(0, 0, 0, 0.376471)
+shadow_offset = Vector2(2, 2)
+
+[node name="MathBlock" instance=ExtResource("1_r10fi")]
+self_modulate = Color(1, 0.705882, 0.819608, 1)
+script = SubResource("GDScript_leqtk")
+
+[node name="Label" type="Label" parent="." index="0"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 56.0
+offset_bottom = 56.0
+size_flags_horizontal = 4
+text = "+"
+label_settings = SubResource("LabelSettings_frmrm")
+horizontal_alignment = 1
+vertical_alignment = 1

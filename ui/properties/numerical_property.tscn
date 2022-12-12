@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://bc2ff2efas4jk"]
+
+[ext_resource type="Script" path="res://ui/properties/numerical_property.gd" id="1_n7wgo"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oqqt1"]
+
+[node name="NumericalProperty" type="Panel"]
+custom_minimum_size = Vector2(64, 64)
+offset_right = 64.0
+offset_bottom = 64.0
+size_flags_horizontal = 0
+size_flags_vertical = 4
+script = ExtResource("1_n7wgo")
+
+[node name="Number" type="LineEdit" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(10, 10)
+theme_override_styles/normal = SubResource("StyleBoxEmpty_oqqt1")
+alignment = 1
+context_menu_enabled = false
+
+[connection signal="text_changed" from="Number" to="." method="_on_number_text_changed"]

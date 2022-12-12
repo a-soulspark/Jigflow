@@ -1,0 +1,257 @@
+[gd_scene load_steps=25 format=3 uid="uid://cxkjx3rujg0av"]
+
+[ext_resource type="Script" path="res://grid_chart.gd" id="1_pj2k5"]
+[ext_resource type="PackedScene" uid="uid://cbgxhbs5pl4ks" path="res://blocks/block.tscn" id="2_5qt4q"]
+[ext_resource type="Script" path="res://block_inspector.gd" id="3_xvsfc"]
+[ext_resource type="Script" path="res://ui/block_button_grid.gd" id="4_6fdep"]
+[ext_resource type="PackedScene" uid="uid://pks7xpqecne1" path="res://ui/property_field.tscn" id="4_qxnnb"]
+[ext_resource type="PackedScene" uid="uid://cfswa1bg7xvb2" path="res://ui/block_button.tscn" id="5_bvv8p"]
+[ext_resource type="PackedScene" uid="uid://cq5qsycvxbe6n" path="res://ui/port_field.tscn" id="5_s4qlg"]
+[ext_resource type="Texture2D" uid="uid://bxml0qq8unjbl" path="res://ui/trash_can.svg" id="5_xgc3j"]
+[ext_resource type="PackedScene" uid="uid://dpp8oghs35v2o" path="res://blocks/number_block.tscn" id="7_1bjqd"]
+[ext_resource type="Texture2D" uid="uid://chgfip0upxgl7" path="res://ui/play.svg" id="8_ntodk"]
+[ext_resource type="PackedScene" uid="uid://dfuy7n2wpyx68" path="res://blocks/button_block.tscn" id="10_dm3l8"]
+[ext_resource type="PackedScene" uid="uid://vgncngl1tun7" path="res://blocks/math_block.tscn" id="10_jafp1"]
+[ext_resource type="PackedScene" uid="uid://b5srccfmp3g8q" path="res://blocks/link_block.tscn" id="11_74d7f"]
+[ext_resource type="PackedScene" uid="uid://cd12n65wwn1nl" path="res://blocks/condition_block.tscn" id="12_peveh"]
+
+[sub_resource type="GDScript" id="GDScript_vmosn"]
+script/source = "extends MenuBar
+
+func _on_file_id_pressed(id: int) -> void:
+	var event = InputEventAction.new()
+	event.pressed = true
+	event.action = ['menu_new', 'menu_load', '', 'menu_save'][id]
+	Input.parse_input_event(event)
+"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o5poy"]
+content_margin_left = 32.0
+bg_color = Color(0.137255, 0.176471, 0.254902, 0.6)
+border_width_left = 4
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tmw42"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2c6kl"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 0.752941)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="InputEventKey" id="InputEventKey_4grtv"]
+keycode = 4194312
+
+[sub_resource type="Shortcut" id="Shortcut_5qbq1"]
+events = [SubResource("InputEventKey_4grtv")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_6uap4"]
+keycode = 4194309
+
+[sub_resource type="Shortcut" id="Shortcut_m7prd"]
+events = [SubResource("InputEventKey_6uap4")]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_jvp68"]
+thickness = 2
+
+[sub_resource type="GDScript" id="GDScript_vn3d7"]
+script/source = "extends Camera2D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+
+func _unhandled_input(event: InputEvent) -> void:
+	if Input.is_action_pressed(\"alt_click\") and event is InputEventMouseMotion:
+		var mouse_motion_event = event as InputEventMouseMotion
+		translate(-mouse_motion_event.relative / zoom)
+	
+	if event is InputEventMouseButton:
+		if event.is_pressed():
+			var factor = 0
+			if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+				factor = 1.1
+			elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+				factor = 0.909
+			else: return
+			
+			var delta = (get_global_mouse_position() - (get_screen_center_position() - get_viewport_rect().size / 2 / zoom)) * (factor - 1)
+			translate(delta)
+			zoom *= factor
+"
+
+[node name="Root" type="Node2D"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MenuBar" type="MenuBar" parent="CanvasLayer"]
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+script = SubResource("GDScript_vmosn")
+
+[node name="File" type="PopupMenu" parent="CanvasLayer/MenuBar"]
+title = "File"
+size = Vector2i(168, 100)
+item_count = 4
+item_0/text = "New Grid (Ctrl+N)"
+item_0/id = 0
+item_1/text = "Open Grid (Ctrl+E)"
+item_1/id = 1
+item_2/text = ""
+item_2/id = 2
+item_2/separator = true
+item_3/text = "Save Grid (Ctrl+S)"
+item_3/id = 3
+
+[node name="InspectorPanel" type="Panel" parent="CanvasLayer"]
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -272.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+theme_override_styles/panel = SubResource("StyleBoxFlat_o5poy")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/InspectorPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BlockInspector" type="Panel" parent="CanvasLayer/InspectorPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_tmw42")
+script = ExtResource("3_xvsfc")
+property_scene = ExtResource("4_qxnnb")
+port_field_scene = ExtResource("5_s4qlg")
+
+[node name="Toolbar" type="HBoxContainer" parent="CanvasLayer/InspectorPanel/VBoxContainer/BlockInspector"]
+layout_mode = 0
+offset_right = 68.0
+offset_bottom = 24.0
+
+[node name="DeleteButton" type="Button" parent="CanvasLayer/InspectorPanel/VBoxContainer/BlockInspector/Toolbar"]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_2c6kl")
+shortcut = SubResource("Shortcut_5qbq1")
+icon = ExtResource("5_xgc3j")
+icon_alignment = 1
+expand_icon = true
+
+[node name="ExecuteButton" type="Button" parent="CanvasLayer/InspectorPanel/VBoxContainer/BlockInspector/Toolbar"]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_2c6kl")
+shortcut = SubResource("Shortcut_m7prd")
+icon = ExtResource("8_ntodk")
+icon_alignment = 1
+expand_icon = true
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/InspectorPanel/VBoxContainer/BlockInspector"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+follow_focus = true
+
+[node name="Properties" type="VBoxContainer" parent="CanvasLayer/InspectorPanel/VBoxContainer/BlockInspector/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 3
+
+[node name="PortField" parent="CanvasLayer/InspectorPanel/VBoxContainer/BlockInspector/ScrollContainer/Properties" instance=ExtResource("5_s4qlg")]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/InspectorPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_jvp68")
+
+[node name="BlockButtonGrid" type="GridContainer" parent="CanvasLayer/InspectorPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+columns = 4
+script = ExtResource("4_6fdep")
+
+[node name="Button2" parent="CanvasLayer/InspectorPanel/VBoxContainer/BlockButtonGrid" instance=ExtResource("5_bvv8p")]
+layout_mode = 2
+block_scene = ExtResource("7_1bjqd")
+
+[node name="Button3" parent="CanvasLayer/InspectorPanel/VBoxContainer/BlockButtonGrid" instance=ExtResource("5_bvv8p")]
+layout_mode = 2
+block_scene = ExtResource("10_jafp1")
+
+[node name="Button4" parent="CanvasLayer/InspectorPanel/VBoxContainer/BlockButtonGrid" instance=ExtResource("5_bvv8p")]
+layout_mode = 2
+block_scene = ExtResource("10_dm3l8")
+
+[node name="Button5" parent="CanvasLayer/InspectorPanel/VBoxContainer/BlockButtonGrid" instance=ExtResource("5_bvv8p")]
+layout_mode = 2
+block_scene = ExtResource("11_74d7f")
+
+[node name="Button6" parent="CanvasLayer/InspectorPanel/VBoxContainer/BlockButtonGrid" instance=ExtResource("5_bvv8p")]
+layout_mode = 2
+block_scene = ExtResource("12_peveh")
+
+[node name="GridChart" type="Node2D" parent="."]
+script = ExtResource("1_pj2k5")
+block_to_place = ExtResource("2_5qt4q")
+
+[node name="Camera2D" type="Camera2D" parent="GridChart"]
+anchor_mode = 0
+current = true
+position_smoothing_speed = 30.0
+script = SubResource("GDScript_vn3d7")
+
+[node name="SaveFileDialog" type="FileDialog" parent="GridChart"]
+position = Vector2i(250, 100)
+size = Vector2i(500, 400)
+min_size = Vector2i(500, 400)
+ok_button_text = "Save"
+dialog_text = "Save Location"
+access = 1
+root_subfolder = "user://"
+filters = PackedStringArray("*.json")
+
+[node name="LoadFileDialog" type="FileDialog" parent="GridChart"]
+title = "Open a File"
+position = Vector2i(250, 100)
+size = Vector2i(500, 400)
+min_size = Vector2i(500, 400)
+ok_button_text = "Open"
+dialog_text = "Save Location"
+file_mode = 0
+access = 1
+root_subfolder = "user://"
+filters = PackedStringArray("*.json")
+
+[connection signal="id_pressed" from="CanvasLayer/MenuBar/File" to="CanvasLayer/MenuBar" method="_on_file_id_pressed"]
+[connection signal="pressed" from="CanvasLayer/InspectorPanel/VBoxContainer/BlockInspector/Toolbar/DeleteButton" to="GridChart" method="_on_delete_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/InspectorPanel/VBoxContainer/BlockInspector/Toolbar/ExecuteButton" to="GridChart" method="_on_execute_button_pressed"]
+[connection signal="block_selected" from="CanvasLayer/InspectorPanel/VBoxContainer/BlockButtonGrid" to="GridChart" method="_set_block_to_place"]
+[connection signal="block_selected" from="GridChart" to="CanvasLayer/InspectorPanel/VBoxContainer/BlockInspector" method="_on_grid_chart_block_selected"]

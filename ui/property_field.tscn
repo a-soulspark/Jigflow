@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://pks7xpqecne1"]
+
+[ext_resource type="Script" path="res://ui/property_field.gd" id="1_hmns0"]
+[ext_resource type="PackedScene" uid="uid://bc2ff2efas4jk" path="res://ui/properties/numerical_property.tscn" id="3_jn05o"]
+[ext_resource type="SystemFont" uid="uid://clgxx8np5xv0c" path="res://ui/mono_font.tres" id="4_eialo"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ig8kl"]
+font = ExtResource("4_eialo")
+
+[node name="PropertyField" type="HBoxContainer"]
+theme_override_constants/separation = 8
+alignment = 1
+script = ExtResource("1_hmns0")
+numerical_property = ExtResource("3_jn05o")
+
+[node name="Name" type="Label" parent="."]
+offset_right = 39.0
+offset_bottom = 22.0
+text = "Name"
+label_settings = SubResource("LabelSettings_ig8kl")
+
+[node name="ValueContainer" type="MarginContainer" parent="."]
+offset_left = 47.0
+offset_right = 47.0
+offset_bottom = 22.0
+size_flags_horizontal = 3

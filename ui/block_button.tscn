@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://cfswa1bg7xvb2"]
+
+[ext_resource type="Script" path="res://ui/block_button.gd" id="1_a6me8"]
+[ext_resource type="PackedScene" uid="uid://cbgxhbs5pl4ks" path="res://blocks/block.tscn" id="2_phtwv"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dt4nl"]
+bg_color = Color(0, 0, 0, 0.752941)
+
+[node name="Button" type="Button"]
+show_behind_parent = true
+custom_minimum_size = Vector2(60, 60)
+theme_override_styles/normal = SubResource("StyleBoxFlat_dt4nl")
+script = ExtResource("1_a6me8")
+block_scene = ExtResource("2_phtwv")

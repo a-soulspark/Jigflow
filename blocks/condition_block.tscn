@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=3 uid="uid://cd12n65wwn1nl"]
+
+[ext_resource type="PackedScene" uid="uid://cbgxhbs5pl4ks" path="res://blocks/block.tscn" id="1_nksle"]
+[ext_resource type="SystemFont" uid="uid://clgxx8np5xv0c" path="res://ui/mono_font.tres" id="2_o6r4e"]
+
+[sub_resource type="GDScript" id="GDScript_c8r7s"]
+resource_name = "ConditionBlock"
+script/source = "extends Block
+
+func get_property_map():
+	return {
+		\"condition\": PropertyValue.new('Cond', PropertyValue.Type.TOGGLE, 0, Port.Mode.INPUT, Color.MEDIUM_AQUAMARINE),
+	}
+
+func propagate(direction : Enums.Direction = Enums.Direction.NONE, recursion_limit = 1):
+	recursion_depth = 0
+	if properties.condition.value:
+		super.propagate(direction, recursion_limit + 1)
+"
+
+[sub_resource type="LabelSettings" id="LabelSettings_0671a"]
+line_spacing = 0.0
+font = ExtResource("2_o6r4e")
+font_size = 40
+outline_size = 8
+outline_color = Color(0, 0, 0, 0.25098)
+shadow_size = 4
+shadow_color = Color(0, 0, 0, 0.376471)
+shadow_offset = Vector2(2, 2)
+
+[node name="ConditionBlock" instance=ExtResource("1_nksle")]
+self_modulate = Color(1, 0.75, 0, 1)
+script = SubResource("GDScript_c8r7s")
+
+[node name="Label" type="Label" parent="." index="0"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 56.0
+offset_bottom = 56.0
+size_flags_horizontal = 4
+text = "?"
+label_settings = SubResource("LabelSettings_0671a")
+horizontal_alignment = 1
+vertical_alignment = 1

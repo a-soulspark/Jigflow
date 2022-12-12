@@ -1,0 +1,47 @@
+[gd_scene load_steps=4 format=3 uid="uid://b5srccfmp3g8q"]
+
+[ext_resource type="PackedScene" uid="uid://cbgxhbs5pl4ks" path="res://blocks/block.tscn" id="1_iar4a"]
+[ext_resource type="Texture2D" uid="uid://b6ofmbp0ykeld" path="res://blocks/arrow_link.png" id="2_xmydj"]
+
+[sub_resource type="GDScript" id="GDScript_2fsvs"]
+resource_name = "LinkBlock"
+script/source = "extends Block
+
+func get_property_map():
+	return {
+		\"none\": PropertyValue.new('-', PropertyValue.Type.NUMBER, 0, Port.Mode.PASSIVE, Color.TRANSPARENT),
+		\"a\": PropertyValue.new('A', PropertyValue.Type.NUMBER, 0, Port.Mode.PASSIVE, Color.GREEN),
+		\"b\": PropertyValue.new('B', PropertyValue.Type.NUMBER, 0, Port.Mode.PASSIVE, Color.CYAN)
+	}
+
+
+func _setup_ports(default_property : PropertyValue):
+	ports = []
+	for i in range(4):
+		var new_port = LinkPort.new(default_property if in_grid else properties.a)
+		new_port.connect(\"port_modified\", _port_modified.bind(new_port, i))
+		ports.append(new_port)
+
+
+func _port_modified(port : Port, direction : Enums.Direction):
+	var arrow = arrows[direction]
+	arrow.texture = preload(\"res://blocks/arrow_link.png\")
+	arrow.modulate = port.property.color
+	pass
+"
+
+[node name="LinkBlock" instance=ExtResource("1_iar4a")]
+self_modulate = Color(0.164706, 0.164706, 0.164706, 0.188235)
+script = SubResource("GDScript_2fsvs")
+
+[node name="Arrow1" parent="." index="0"]
+texture = ExtResource("2_xmydj")
+
+[node name="Arrow2" parent="." index="1"]
+texture = ExtResource("2_xmydj")
+
+[node name="Arrow3" parent="." index="2"]
+texture = ExtResource("2_xmydj")
+
+[node name="Arrow4" parent="." index="3"]
+texture = ExtResource("2_xmydj")

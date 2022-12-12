@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://bpnrltoqkxpne"]
+
+[ext_resource type="Script" path="res://ui/properties/text_property.gd" id="1_aamac"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0d2ai"]
+
+[node name="TextProperty" type="Panel"]
+custom_minimum_size = Vector2(64, 64)
+offset_right = 64.0
+offset_bottom = 64.0
+size_flags_horizontal = 0
+size_flags_vertical = 4
+script = ExtResource("1_aamac")
+
+[node name="Text" type="LineEdit" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(10, 10)
+theme_override_styles/normal = SubResource("StyleBoxEmpty_0d2ai")
+alignment = 1
+context_menu_enabled = false
+
+[connection signal="text_changed" from="Text" to="." method="_on_text_changed"]

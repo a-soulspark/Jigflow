@@ -1,0 +1,96 @@
+[gd_scene load_steps=4 format=3 uid="uid://cmynhwq08qve8"]
+
+[ext_resource type="Texture2D" uid="uid://c5x3iq3ybx70j" path="res://ui/chevron.svg" id="1_tyec3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wbh7f"]
+
+[sub_resource type="GDScript" id="GDScript_xql0q"]
+script/source = "class_name DirectionButton
+extends Button
+
+@export
+var direction : Enums.Direction
+
+func _pressed() -> void:
+	get_parent().set_direction(direction)
+"
+
+[node name="DirectionProperty" type="Panel"]
+custom_minimum_size = Vector2(64, 64)
+offset_right = 64.0
+offset_bottom = 64.0
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="Top" type="Button" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -10.0
+offset_right = 10.0
+offset_bottom = 20.0
+grow_horizontal = 2
+pivot_offset = Vector2(10, 10)
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxEmpty_wbh7f")
+icon = ExtResource("1_tyec3")
+icon_alignment = 1
+script = SubResource("GDScript_xql0q")
+direction = 0
+
+[node name="Bottom" type="Button" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -10.0
+offset_top = -20.0
+offset_right = 10.0
+grow_horizontal = 2
+grow_vertical = 0
+rotation = 3.14159
+pivot_offset = Vector2(10, 10)
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxEmpty_wbh7f")
+icon = ExtResource("1_tyec3")
+icon_alignment = 1
+script = SubResource("GDScript_xql0q")
+direction = 2
+
+[node name="Left" type="Button" parent="."]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -10.0
+offset_right = 20.0
+offset_bottom = 10.0
+grow_vertical = 2
+rotation = 4.71239
+pivot_offset = Vector2(10, 10)
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxEmpty_wbh7f")
+icon = ExtResource("1_tyec3")
+icon_alignment = 1
+script = SubResource("GDScript_xql0q")
+direction = 1
+
+[node name="Right" type="Button" parent="."]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -10.0
+offset_bottom = 10.0
+grow_horizontal = 0
+grow_vertical = 2
+rotation = 1.5708
+pivot_offset = Vector2(10, 10)
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxEmpty_wbh7f")
+icon = ExtResource("1_tyec3")
+icon_alignment = 1
+script = SubResource("GDScript_xql0q")
+direction = 3
